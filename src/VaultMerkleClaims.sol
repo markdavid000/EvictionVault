@@ -1,5 +1,5 @@
 // SPDX-License-Identifier: MIT
-pragma solidity ^0.8.20;
+pragma solidity ^0.8.25;
 
 import "../lib/openzeppelin-contracts/contracts/utils/cryptography/MerkleProof.sol";
 import "./VaultStorage.sol";
