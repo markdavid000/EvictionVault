@@ -14,22 +14,22 @@ src/
 
 ## Security Fixes
 
-1. setMerkleRoot Access Control
+1. setMerkleRoot Access Control: 
 Previously callable by anyone. Now restricted to vault owners.
 
-2. emergencyWithdrawAll Public Drain
+2. emergencyWithdrawAll Public Drain:
 Restricted to vault owners.
 
-3. pause/unpause Governance
+3. pause/unpause Governance:
 Pause control restricted to multisig owners.
 
-4. tx.origin Usage
+4. tx.origin Usage:
 Replaced with msg.sender in receive() function.
 
-5. Unsafe ETH Transfers
+5. Unsafe ETH Transfers:
 .transfer replaced with .call to support smart contract wallets.
 
-6. Timelock Validation
+6. Timelock Validation:
 Added validation to ensure transactions cannot execute before timelock.
 
 ## Tests
