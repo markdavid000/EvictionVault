@@ -62,10 +62,12 @@ abstract contract VaultMultiSig is VaultStorage {
     }
 
     function pause() external onlyOwner {
+        require(msg.sender == address(this), "only multisig");
         paused = true;
     }
 
     function unpause() external onlyOwner {
+        require(msg.sender == address(this), "only multisig");
         paused = false;
     }
 }
