@@ -1,66 +1,44 @@
-## Foundry
+# EvictionVault Implementation
 
-**Foundry is a blazing fast, portable and modular toolkit for Ethereum application development written in Rust.**
+## Overview
 
-Foundry consists of:
+The EvictionVault contract was refactored from a single vulnerable file into multiple secured files.
 
-- **Forge**: Ethereum testing framework (like Truffle, Hardhat and DappTools).
-- **Cast**: Swiss army knife for interacting with EVM smart contracts, sending transactions and getting chain data.
-- **Anvil**: Local Ethereum node, akin to Ganache, Hardhat Network.
-- **Chisel**: Fast, utilitarian, and verbose solidity REPL.
+New structure:
 
-## Documentation
+src/
+- EvictionVault.sol
+- VaultStorage.sol
+- VaultMultiSig.sol
+- VaultMerkleClaims.sol
 
-https://book.getfoundry.sh/
+## Security Fixes
 
-## Usage
+1. setMerkleRoot Access Control
+Previously callable by anyone. Now restricted to vault owners.
 
-### Build
+2. emergencyWithdrawAll Public Drain
+Restricted to vault owners.
 
-```shell
-$ forge build
-```
+3. pause/unpause Governance
+Pause control restricted to multisig owners.
 
-### Test
+4. tx.origin Usage
+Replaced with msg.sender in receive() function.
 
-```shell
-$ forge test
-```
+5. Unsafe ETH Transfers
+.transfer replaced with .call to support smart contract wallets.
 
-### Format
+6. Timelock Validation
+Added validation to ensure transactions cannot execute before timelock.
 
-```shell
-$ forge fmt
-```
+## Tests
 
-### Gas Snapshots
+The following test cases were implemented:
 
-```shell
-$ forge snapshot
-```
-
-### Anvil
-
-```shell
-$ anvil
-```
-
-### Deploy
-
-```shell
-$ forge script script/Counter.s.sol:CounterScript --rpc-url <your_rpc_url> --private-key <your_private_key>
-```
-
-### Cast
-
-```shell
-$ cast <subcommand>
-```
-
-### Help
-
-```shell
-$ forge --help
-$ anvil --help
-$ cast --help
-```
+- testDeposit
+- testWithdraw
+- testPauseBlocksWithdraw
+- testMultisigExecution
+- testTimelockPreventsEarlyExecution
+- testSetMerkleRoot
