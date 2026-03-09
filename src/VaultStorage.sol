@@ -1,4 +1,4 @@
-//SPDX-License-Identifier: MIT
+// SPDX-License-Identifier: MIT
 pragma solidity ^0.8.25;
 
 abstract contract VaultStorage {
@@ -25,13 +25,30 @@ abstract contract VaultStorage {
 
     bytes32 public merkleRoot;
     mapping(address => bool) public claimed;
-     mapping(bytes32 => bool) public usedHashes;
+    mapping(bytes32 => bool) public usedHashes;
 
 
+    uint256 public constant TIMELOCK_DURATION = 1 hours;
 
     uint256 public totalVaultValue;
 
     bool public paused;
 
-    uint256 public constant TIMELOCK_DURATION = 1 hours;
+    event Deposit(address indexed depositor, uint256 amount);
+    event Withdrawal(address indexed withdrawer, uint256 amount);
+    event Submission(uint256 indexed txId);
+    event Confirmation(uint256 indexed txId, address indexed owner);
+    event Execution(uint256 indexed txId);
+    event MerkleRootSet(bytes32 indexed newRoot);
+    event Claim(address indexed claimant, uint256 amount);
+
+    modifier onlyOwner() {
+        require(isOwner[msg.sender], "not owner");
+        _;
+    }
+
+    modifier whenNotPaused() {
+        require(!paused, "paused");
+        _;
+    }
 }
